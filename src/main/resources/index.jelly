@@ -22,6 +22,7 @@
   - THE SOFTWARE.
   -->
 
+<?jelly escape-by-default='true'?>
 <div>
     This plugin allows copying files located somewhere on the master node into
     the jobs' workspaces, whether their builds take place on the master node or
