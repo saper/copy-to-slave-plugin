@@ -125,7 +125,7 @@ public class CopyToSlaveBuildWrapper extends BuildWrapper {
             String includes = env.expand(getIncludes());
             String excludes = env.expand(getExcludes());
 
-            listener.getLogger().printf("[copy-to-slave] Copying '%s', excluding %s, from '%s' on the master to '%s' on '%s'.\n",
+            listener.getLogger().printf("[copy-to-slave] Copying '%s', excluding %s, from '%s' on the master to '%s' on '%s'.%n",
                     includes, StringUtils.isBlank(excludes) ? "nothing" : '\'' + excludes + '\'', rootFilePathOnMaster.toURI(),
                     projectWorkspaceOnSlave.toURI(), Computer.currentComputer().getNode().getDisplayName());
 

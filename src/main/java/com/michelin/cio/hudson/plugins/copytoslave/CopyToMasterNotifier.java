@@ -88,7 +88,7 @@ public class CopyToMasterNotifier extends Notifier {
             String includes = env.expand(getIncludes());
             String excludes = env.expand(getExcludes());
 
-            listener.getLogger().printf("[copy-to-slave] Copying '%s', excluding %s, from '%s' on '%s' to '%s' on the master.\n",
+            listener.getLogger().printf("[copy-to-slave] Copying '%s', excluding %s, from '%s' on '%s' to '%s' on the master.%n",
                     includes, StringUtils.isBlank(excludes) ? "nothing" : '\'' + excludes + '\'', projectWorkspaceOnSlave.toURI(),
                     Computer.currentComputer().getNode(), destinationFilePath.toURI());
 
