@@ -146,11 +146,6 @@ public class CopyToSlaveBuildWrapper extends BuildWrapper {
         };
     }
 
-    @Override
-    public Environment setUp(Build build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
-        return setUp(build, launcher, listener);
-    }
-
     public String getIncludes() {
         return includes;
     }
