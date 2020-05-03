@@ -192,7 +192,9 @@ public class MyFilePath implements Serializable {
 
                     IOUtils.copy(t, f);
 
-                    f.setLastModified(tarEntry.getModTime().getTime());
+                    if (!f.setLastModified(tarEntry.getModTime().getTime())) {
+                        throw new IOException("Failed update modification time of "+f.getAbsolutePath());
+                    }
 
                     // chmod
                     int mode = tarEntry.getMode()&0777;
