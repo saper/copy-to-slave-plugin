@@ -178,12 +178,16 @@ public class MyFilePath implements Serializable {
 
                 // dir processing
                 if(!flatten && tarEntry.isDirectory()) {
-                    f.mkdirs();
+                    if (!f.mkdirs()) {
+                        throw new IOException("Cannot create directory at "+f.getAbsolutePath());
+                    }
                 }
                 // file processing
                 else {
                     if(!flatten && f.getParentFile() != null) {
-                        f.getParentFile().mkdirs();
+                        if(!f.getParentFile().mkdirs()) {
+                            throw new IOException("Cannot create directory at "+f.getAbsolutePath());
+                        }
                     }
 
                     IOUtils.copy(t, f);
