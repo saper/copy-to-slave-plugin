@@ -26,7 +26,6 @@
 package com.michelin.cio.hudson.plugins.copytoslave;
 
 import hudson.FilePath;
-import hudson.FilePath.FileCallable;
 import hudson.FilePath.TarCompression;
 import hudson.Functions;
 import hudson.Util;
@@ -39,6 +38,7 @@ import hudson.util.IOException2;
 import hudson.util.IOUtils;
 import hudson.util.io.Archiver;
 import hudson.util.io.ArchiverFactory;
+import jenkins.MasterToSlaveFileCallable;
 import static hudson.util.jna.GNUCLibrary.LIBC;
 import java.io.File;
 import java.io.IOException;
@@ -78,7 +78,7 @@ public class MyFilePath implements Serializable {
             final FilePath target) throws IOException, InterruptedException {
         if(source.getChannel() == target.getChannel()) {
             // --- local --> local copy ---
-            return new FileCallable<Integer>() {
+            return new MasterToSlaveFileCallable<Integer>() {
                 public Integer invoke(File sourceBaseDir, VirtualChannel channel) throws IOException {
                     if(!sourceBaseDir.exists()) {
                         return 0;
@@ -127,7 +127,7 @@ public class MyFilePath implements Serializable {
             // --- local -> remote copy ---
             final Pipe pipe = Pipe.createLocalToRemote();
 
-            Future<Void> future = target.actAsync(new FileCallable<Void>() {
+            Future<Void> future = target.actAsync(new MasterToSlaveFileCallable<Void>() {
                 private static final long serialVersionUID = 1; // HUDSON-8274
 
                 public Void invoke(File f, VirtualChannel channel) throws IOException {
