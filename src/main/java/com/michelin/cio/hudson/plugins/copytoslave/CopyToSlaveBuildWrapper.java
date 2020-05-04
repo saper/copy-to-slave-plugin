@@ -89,6 +89,7 @@ public class CopyToSlaveBuildWrapper extends BuildWrapper {
 
     @Override
     public Environment setUp(AbstractBuild build, final Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
+        assert build != null;
         EnvVars env = build.getEnvironment(listener);
         env.overrideAll(build.getBuildVariables());
 
@@ -98,7 +99,10 @@ public class CopyToSlaveBuildWrapper extends BuildWrapper {
             return null;
         }
 
-        if(Computer.currentComputer() instanceof MasterComputer && RELATIVE_TO_WORKSPACE.equals(relativeTo)) {
+        if(Computer.currentComputer() == null) {
+            listener.getLogger().println(
+                    "[copy-to-slave] Not running on the Executor thread: No copy will take place. ");
+        } else if(Computer.currentComputer() instanceof MasterComputer && RELATIVE_TO_WORKSPACE.equals(relativeTo)) {
             listener.getLogger().println(
                     "[copy-to-slave] Trying to copy files from the workspace on the master to the same workspace on the same master: No copy will take place.");
         }
@@ -121,13 +125,15 @@ public class CopyToSlaveBuildWrapper extends BuildWrapper {
             }
 
             FilePath projectWorkspaceOnSlave = build.getWorkspace();
+            assert projectWorkspaceOnSlave != null;
 
             String includes = env.expand(getIncludes());
             String excludes = env.expand(getExcludes());
 
             listener.getLogger().printf("[copy-to-slave] Copying '%s', excluding %s, from '%s' on the master to '%s' on '%s'.%n",
                     includes, StringUtils.isBlank(excludes) ? "nothing" : '\'' + excludes + '\'', rootFilePathOnMaster.toURI(),
-                    projectWorkspaceOnSlave.toURI(), Computer.currentComputer().getNode().getDisplayName());
+                    projectWorkspaceOnSlave.toURI(),
+                    Computer.currentComputer().getName());
 
             // HUDSON-7999
             MyFilePath.copyRecursiveTo(
