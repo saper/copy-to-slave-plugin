@@ -64,15 +64,32 @@ public class CopyToSlaveUtils {
             // Quote separator, as String.split() takes a regex and
             // File.separator isn't a valid regex character on Windows
             final String separator = Pattern.quote(File.separator);
-            String pathOnMaster = Jenkins.getInstance().getWorkspaceFor((TopLevelItem)project.getRootProject()).getRemote();
-            String parts[] = build.getWorkspace().getRemote().
-                    split("workspace" + separator + project.getRootProject().getName());
-            if (parts.length > 1) {
-                // This happens for the non free style projects (like multi configuration projects, etc)
-                // So we'll just add the extra part of the path to the workspace
-                pathOnMaster += parts[1];
+            TopLevelItem top = (TopLevelItem)project.getRootProject();
+            FilePath topLevelWorkspace = Jenkins.getInstance().getWorkspaceFor(top);
+            FilePath buildWorkspace = build.getWorkspace();
+
+            if (topLevelWorkspace != null && buildWorkspace != null) {
+                String pathOnMaster = topLevelWorkspace.getRemote();
+
+                String parts[] = buildWorkspace.getRemote().
+                        split("workspace" + separator + project.getRootProject().getName());
+                if (parts.length > 1) {
+                    // This happens for the non free style projects (like multi configuration projects, etc)
+                    // So we'll just add the extra part of the path to the workspace
+                    pathOnMaster += parts[1];
+                }
+                projectWorkspaceOnMaster = new FilePath(new File(pathOnMaster));
+             } else {
+                projectWorkspaceOnMaster = null;
+             }
+        }
+
+        if(projectWorkspaceOnMaster == null) {
+            if(logger != null) {
+                logger.println("Could not determine remote workspace path");
             }
-            projectWorkspaceOnMaster = new FilePath(new File(pathOnMaster));
+            LOGGER.log(Level.SEVERE, "Could not determine remote workspace path");
+            return null;
         }
 
         try {
