@@ -4,7 +4,8 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>3.57</version>
+    <version>4.1</version>
+    <relativePath />
   </parent>
   <artifactId>copy-to-slave</artifactId>
   <packaging>hpi</packaging>
@@ -14,7 +15,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.level>8</java.level>
-    <jenkins.version>2.60.3</jenkins.version>
+    <jenkins.version>2.195</jenkins.version>
   </properties>
   <developers>
     <developer>
@@ -47,20 +48,4 @@
     <developerConnection>scm:git:https://github.com/jenkinsci/copy-to-slave-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/copy-to-slave-plugin</url>
   </scm>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.0.0</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs</artifactId>
-            <version>4.0.2</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-    </plugins>
-  </build>
 </project>
